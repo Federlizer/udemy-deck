@@ -1,6 +1,8 @@
 package main
 
-import "fmt"
+import (
+	"strings"
+)
 
 type deck []string
 
@@ -20,8 +22,10 @@ func newDeck() deck {
 	return newDeck
 }
 
-func (d deck) print() {
-	for i, card := range d {
-		fmt.Println(i, card)
-	}
+func (d deck) deal(handSize int) (deck, deck) {
+	return d[:handSize], d[handSize:]
+}
+
+func (d deck) String() string {
+	return strings.Join(d, ",")
 }
