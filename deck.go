@@ -1,7 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"io/ioutil"
+	"os"
 	"strings"
 )
 
@@ -9,7 +11,9 @@ type deck []string
 
 var (
 	cardSuits  = [4]string{"Spades", "Hearts", "Diamonds", "Clubs"}
-	cardValues = [13]string{"Ace", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Jack", "Queen", "King"}
+	cardValues = [13]string{"Ace", "Two", "Three", "Four",
+		"Five", "Six", "Seven", "Eight", "Nine", "Ten",
+		"Jack", "Queen", "King"}
 )
 
 func newDeck() deck {
@@ -17,7 +21,7 @@ func newDeck() deck {
 
 	for _, suit := range cardSuits {
 		for _, value := range cardValues {
-			newDeck = append(newDeck, suit+" of "+value)
+			newDeck = append(newDeck, value+" of "+suit)
 		}
 	}
 	return newDeck
@@ -33,4 +37,14 @@ func (d deck) String() string {
 
 func (d deck) saveToFile(filename string) error {
 	return ioutil.WriteFile(filename, []byte(d.String()), 0666)
+}
+
+func newDeckFromFile(filename string) deck {
+	data, err := ioutil.ReadFile(filename)
+	if err != nil {
+		fmt.Println("Error:", err)
+		os.Exit(1)
+	}
+
+	return deck(strings.Split(string(data), ","))
 }
